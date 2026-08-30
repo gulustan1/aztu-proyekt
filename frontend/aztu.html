@@ -222,7 +222,7 @@
 
     <canvas id="canvas-3d"></canvas>
     <nav id="slide-nav" aria-label="Presentation slide navigation"></nav>
-    <div class="presentation-brand" aria-label="Azerbaijan Technical University"><img src="image/aztu-logo.png" alt="AzTU logo"><span>Azerbaijan Technical University</span></div>
+    <div class="presentation-brand" aria-label="Azerbaijan Technical University"><img src="/frontend/image/aztu-logo.png" alt="AzTU logo"><span>Azerbaijan Technical University</span></div>
 
     <main class="relative z-10 w-full h-screen flex items-center justify-center p-6 md:p-12 pt-20 pb-24">
         
@@ -237,7 +237,7 @@
                     </div>
                     <div class="title-identities">
                         <img src="https://vectorportal.com/storage/Coat_of_arms_of_Azerbaijan_1090.jpg" alt="State Emblem of the Republic of Azerbaijan">
-                        <img src="image/aztu-logo.png" alt="Azerbaijan Technical University logo">
+                        <img src="/frontend/image/aztu-logo.png" alt="Azerbaijan Technical University logo">
                     </div>
                 </div>
                 <div class="title-meta">
@@ -380,7 +380,7 @@
                     <p class="text-gray-400">$P_{PV}, P_{WT}$ - PV and Wind power; $P_{grid}$ - Grid exchange; $P_{ch}, P_{dis}$ - BESS charge/discharge; $P_{loss}$ - Converter losses.</p>
                 </div>
                 <figure class="scientific-figure">
-                    <img src="image/ders1.png" alt="Microgrid architecture with PV, wind generator, BESS, grid, load and SOC dynamics" loading="lazy">
+                    <img src="/frontend/image/ders1.png" alt="Microgrid architecture with PV, wind generator, BESS, grid, load and SOC dynamics" loading="lazy">
                     <figcaption>Figure 1. Microgrid power balance and BESS charging–discharging modes.</figcaption>
                 </figure>
             </div>
@@ -428,7 +428,7 @@
                 <div class="p-4 rounded-2xl bg-gray-900/80 border border-gray-800 text-xs space-y-2">
                     <h4 class="font-bold text-amber-400">Piecewise SOC Penalty Function $f_{SOC}(SOC)$:</h4>
                     <p class="text-gray-400">When SOC is within the safe $[SOC_{low}, SOC_{high}]$ zone, the penalty is 0. Beyond this zone, the penalty increases quadratically:</p>
-                    <figure class="scientific-figure mt-3"><img src="image/image.png" alt="Piecewise SOC degradation penalty equation"><figcaption>Safe SOC operation produces no additional penalty; violations increase quadratically.</figcaption></figure>
+                    <figure class="scientific-figure mt-3"><img src="/frontend/image/image.png" alt="Piecewise SOC degradation penalty equation"><figcaption>Safe SOC operation produces no additional penalty; violations increase quadratically.</figcaption></figure>
                 </div>
             </div>
         </section>
@@ -512,11 +512,11 @@
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <figure class="scientific-figure results-figure">
-                    <img src="image/Picture1.png" alt="Comparison of fixed SOC, classic MPC and adaptive MPC SOC trajectories" loading="lazy">
+                    <img src="/frontend/image/Picture1.png" alt="Comparison of fixed SOC, classic MPC and adaptive MPC SOC trajectories" loading="lazy">
                     <figcaption>Figure 8. SOC comparison: the adaptive MPC trajectory remains within the recommended 35–80% operating region for a longer period.</figcaption>
                 </figure>
                 <figure class="scientific-figure results-figure">
-                    <img src="image/Picture2.png" alt="Comparison of BESS charging and discharging power profiles" loading="lazy">
+                    <img src="/frontend/image/Picture2.png" alt="Comparison of BESS charging and discharging power profiles" loading="lazy">
                     <figcaption>Figure 9. BESS power comparison: adaptive control limits abrupt charge–discharge transitions and peak power stress.</figcaption>
                 </figure>
             </div>
@@ -528,7 +528,7 @@
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-[1.05fr_.95fr] gap-5 text-xs items-start">
                 <figure class="scientific-figure results-figure">
-                    <img src="image/Picture3.png" alt="Comparison of degradation penalty and state-of-health trajectories" loading="lazy">
+                    <img src="/frontend/image/Picture3.png" alt="Comparison of degradation penalty and state-of-health trajectories" loading="lazy">
                     <figcaption>Figure 10. The adaptive MPC strategy produces the lowest cumulative degradation penalty and the highest SOH trajectory.</figcaption>
                 </figure>
                 <div class="space-y-3">
