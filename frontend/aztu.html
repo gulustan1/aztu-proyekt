@@ -210,12 +210,19 @@
         .title-layout::after { background: linear-gradient(150deg, rgba(0,145,200,.10), rgba(229,54,67,.07), rgba(0,158,96,.09)) !important; }
         .title-university { color: #17486a !important; }.title-main h1, .title-meta strong { color: #183c57 !important; }.title-main h1 span { color: #b42336 !important; }.title-kicker, .research-insight strong { color: #0b6e72 !important; }
         .research-insight { background: linear-gradient(90deg, #f1f8f5, transparent) !important; border-left-color: #159b7b !important; }
+
+        /* Persistent AzTU identity */
+        .presentation-brand { position: fixed; z-index: 50; top: 16px; right: 20px; display: flex; align-items: center; gap: 8px; padding: 7px 10px; border: 1px solid rgba(23, 72, 106, .18); border-radius: 14px; background: rgba(255, 254, 250, .9); box-shadow: 0 6px 18px rgba(30, 58, 95, .12); backdrop-filter: blur(10px); }
+        .presentation-brand img { width: 30px; height: 30px; object-fit: contain; }
+        .presentation-brand span { color: #17486a; font-size: 10px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+        @media (max-width: 767px) { .presentation-brand { top: 10px; right: 10px; padding: 5px 7px; }.presentation-brand span { display: none; } }
     </style>
 </head>
 <body class="select-none">
 
     <canvas id="canvas-3d"></canvas>
     <nav id="slide-nav" aria-label="Presentation slide navigation"></nav>
+    <div class="presentation-brand" aria-label="Azerbaijan Technical University"><img src="image/aztu-logo.png" alt="AzTU logo"><span>Azerbaijan Technical University</span></div>
 
     <main class="relative z-10 w-full h-screen flex items-center justify-center p-6 md:p-12 pt-20 pb-24">
         
@@ -504,63 +511,102 @@
                 <i data-lucide="bar-chart-3"></i> 11. Simulation Scenario and Comparison
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <p class="text-xs text-gray-300 mb-3">Comparative SOC dynamics of 3 different control strategies over a 24-hour microgrid test profile:</p>
-                    <div class="w-full h-48 bg-gray-900/80 rounded-xl p-2 border border-gray-800">
-                        <canvas id="socChart"></canvas>
-                    </div>
-                </div>
-                <div>
-                    <p class="text-xs text-gray-300 mb-3">Cumulative Degradation Cost and SOH Preservation Dynamics:</p>
-                    <div class="w-full h-48 bg-gray-900/80 rounded-xl p-2 border border-gray-800">
-                        <canvas id="degChart"></canvas>
-                    </div>
-                </div>
+                <figure class="scientific-figure results-figure">
+                    <img src="image/Picture1.png" alt="Comparison of fixed SOC, classic MPC and adaptive MPC SOC trajectories" loading="lazy">
+                    <figcaption>Figure 8. SOC comparison: the adaptive MPC trajectory remains within the recommended 35–80% operating region for a longer period.</figcaption>
+                </figure>
+                <figure class="scientific-figure results-figure">
+                    <img src="image/Picture2.png" alt="Comparison of BESS charging and discharging power profiles" loading="lazy">
+                    <figcaption>Figure 9. BESS power comparison: adaptive control limits abrupt charge–discharge transitions and peak power stress.</figcaption>
+                </figure>
             </div>
         </section>
 
         <section class="slide-content w-full max-w-5xl glass-card rounded-3xl p-8 md:p-12 slide-enter hidden" data-slide="12">
-            <h2 class="text-2xl font-bold text-emerald-400 mb-6 flex items-center gap-3">
+            <h2 class="text-2xl font-bold text-emerald-400 mb-5 flex items-center gap-3">
                 <i data-lucide="check-check"></i> 12. Results Analysis and Discussion
             </h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs">
-                <div class="p-5 rounded-2xl bg-gray-900/80 border border-emerald-500/30">
-                    <div class="text-emerald-400 font-bold text-sm mb-2">SOC Trajectory</div>
-                    <p class="text-gray-300"><strong>Constant SOC strategy:</strong> The battery frequently approaches critical boundary limits, increasing electrochemical and thermal stress.</p><p class="text-gray-300 mt-3"><strong>Classic MPC:</strong> Produces smoother SOC variations, but does not explicitly preserve battery lifespan.</p><p class="text-gray-300 mt-3"><strong>Proposed Adaptive MPC:</strong> Maintains SOC predominantly within the safe, optimal mid-range.</p>
+            <div class="grid grid-cols-1 md:grid-cols-[1.05fr_.95fr] gap-5 text-xs items-start">
+                <figure class="scientific-figure results-figure">
+                    <img src="image/Picture3.png" alt="Comparison of degradation penalty and state-of-health trajectories" loading="lazy">
+                    <figcaption>Figure 10. The adaptive MPC strategy produces the lowest cumulative degradation penalty and the highest SOH trajectory.</figcaption>
+                </figure>
+                <div class="space-y-3">
+                <div class="p-4 rounded-2xl bg-gray-900/80 border border-emerald-500/30">
+                    <div class="text-emerald-400 font-bold text-sm mb-2">SOC Performance</div>
+                    <ul class="space-y-2 text-gray-300">
+                        <li><strong>Fixed SOC strategy:</strong> the battery frequently approaches its lower and upper boundary regions, which increases electrochemical and thermal stress.</li>
+                        <li><strong>Classic MPC:</strong> SOC variations become smoother, but battery lifetime is not explicitly protected in the optimization objective.</li>
+                        <li><strong>Proposed adaptive MPC:</strong> SOC is maintained predominantly within a safe mid-range, while preserving energy reserves for anticipated demand.</li>
+                    </ul>
                 </div>
-                <div class="p-5 rounded-2xl bg-gray-900/80 border border-cyan-500/30">
-                    <div class="text-cyan-400 font-bold text-sm mb-2">Power Smoothing</div>
-                    <p class="text-gray-300">Charge–discharge transitions are smoother, with a significant reduction in sudden power spikes. This improves converter stability, lowers cycling stress and supports more efficient operation during evening peak demand.</p>
+                <div class="p-4 rounded-2xl bg-gray-900/80 border border-cyan-500/30">
+                    <div class="text-cyan-400 font-bold text-sm mb-2">BESS Power Behaviour</div>
+                    <ul class="space-y-2 text-gray-300">
+                        <li>Charging-to-discharging transitions are smoother over the operating horizon.</li>
+                        <li>Sudden battery-power changes and converter ramping are reduced.</li>
+                        <li>The smoother profile improves power-converter stability, reduces cycling stress and supports the evening peak-load period more reliably.</li>
+                    </ul>
                 </div>
-                <div class="p-5 rounded-2xl bg-gray-900/80 border border-amber-500/30">
-                    <div class="text-amber-400 font-bold text-sm mb-2">SOH and Resource Loss</div>
-                    <p class="text-gray-300">Incorporating a degradation penalty minimizes deep discharging and prolonged exposure to high SOC zones. The result is a balanced compromise between short-term energy optimization and long-term battery longevity.</p>
+                <div class="p-4 rounded-2xl bg-gray-900/80 border border-amber-500/30">
+                    <div class="text-amber-400 font-bold text-sm mb-2">Degradation and Trade-off</div>
+                    <p class="text-gray-300">Including a degradation penalty in the optimization discourages deep discharge and prolonged residence at high SOC. Consequently, the controller achieves a more balanced compromise between short-term energy-cost optimization and long-term battery lifetime preservation.</p>
+                    <div class="mt-3 p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-700"><strong>Key outcome:</strong> lower battery stress without sacrificing microgrid power balance.</div>
+                </div>
                 </div>
             </div>
         </section>
 
         <section class="slide-content w-full max-w-5xl glass-card rounded-3xl p-8 md:p-12 slide-enter hidden" data-slide="13">
-            <h2 class="text-2xl font-bold text-cyan-400 mb-4 flex items-center gap-3">
-                <i data-lucide="award"></i> 13. Conclusions and Future Work
+            <h2 class="text-2xl font-bold text-cyan-400 mb-5 flex items-center gap-3">
+                <i data-lucide="award"></i> 13. Conclusions and Future Research
             </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
-                <div class="space-y-3">
-                    <h3 class="font-bold text-white text-sm">Scientific Contributions & Novelties:</h3>
-                    <ul class="space-y-2 text-gray-300">
-                        <li class="flex items-start gap-2"><i data-lucide="check" class="w-4 h-4 text-cyan-400 shrink-0"></i> A unified framework integrating energy balance, SOC, SOH, DOD, thermal dynamics, dynamic pricing, and generation/load forecasting.</li>
-                        <li class="flex items-start gap-2"><i data-lucide="check" class="w-4 h-4 text-cyan-400 shrink-0"></i> Enhanced microgrid balancing and reduced peak power demand from the main grid.</li>
-                        <li class="flex items-start gap-2"><i data-lucide="check" class="w-4 h-4 text-cyan-400 shrink-0"></i> More efficient renewable-energy utilization, lower degradation and preservation of battery operational life.</li>
-                    </ul>
+            <p class="text-sm text-gray-300 mb-5">The proposed adaptive SOC-based and degradation-aware MPC approach integrates the key operational and health-related factors required for coordinated BESS management in microgrids.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-xs">
+                <div class="p-5 rounded-2xl bg-gray-900/80 border border-cyan-500/30">
+                    <h3 class="font-bold text-cyan-400 text-sm mb-3">Integrated Control Framework</h3>
+                    <div class="grid grid-cols-2 gap-2 text-gray-300">
+                        <span>• Energy balance</span><span>• State of charge (SOC)</span>
+                        <span>• State of health (SOH)</span><span>• Depth of discharge (DOD)</span>
+                        <span>• Battery temperature</span><span>• Dynamic energy price</span>
+                        <span class="col-span-2">• Load and renewable-generation forecasts</span>
+                    </div>
                 </div>
-                <div class="space-y-3">
-                    <h3 class="font-bold text-white text-sm">Future Research Directions:</h3>
+                <div class="p-5 rounded-2xl bg-gray-900/80 border border-emerald-500/30">
+                    <h3 class="font-bold text-emerald-400 text-sm mb-3">Main Advantages</h3>
                     <ul class="space-y-2 text-gray-300">
-                        <li class="flex items-start gap-2"><i data-lucide="arrow-right" class="w-4 h-4 text-indigo-400 shrink-0"></i> LSTM-based forecasting and Stochastic MPC models for uncertainty-aware scheduling.</li>
-                        <li class="flex items-start gap-2"><i data-lucide="arrow-right" class="w-4 h-4 text-indigo-400 shrink-0"></i> Integration of real-time Battery Management System data and a comprehensive BESS digital twin.</li>
-                        <li class="flex items-start gap-2"><i data-lucide="arrow-right" class="w-4 h-4 text-indigo-400 shrink-0"></i> MATLAB/Simulink validation and experimental testing with real-world microgrid data.</li>
+                        <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400 shrink-0"></i>Improved microgrid energy balance and reduced peak power imported from the grid.</li>
+                        <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400 shrink-0"></i>More efficient use of renewable generation and reduced battery degradation.</li>
+                        <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400 shrink-0"></i>Preservation of BESS operational lifetime through health-aware scheduling.</li>
                     </ul>
                 </div>
             </div>
+            <div class="mt-5 p-5 rounded-2xl bg-indigo-950/40 border border-indigo-500/30 text-xs">
+                <h3 class="font-bold text-indigo-400 text-sm mb-3">Future Research Directions</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-gray-300">
+                    <div>• LSTM-based load and renewable-energy forecasting.</div>
+                    <div>• Stochastic MPC for uncertainty-aware scheduling.</div>
+                    <div>• Integration of real-time BMS data and a BESS digital twin.</div>
+                    <div>• MATLAB/Simulink implementation and practical validation.</div>
+                    <div>• Experimental testing with real microgrid data.</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="slide-content w-full max-w-5xl glass-card rounded-3xl p-8 md:p-12 slide-enter hidden" data-slide="14">
+            <h2 class="text-2xl font-bold text-indigo-400 mb-5 flex items-center gap-3"><i data-lucide="book-open"></i> References</h2>
+            <ol class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-3 text-xs text-gray-300 list-decimal list-inside leading-relaxed">
+                <li>International Energy Agency, <em>Batteries and Secure Energy Transitions</em>, IEA Special Report, 2024.</li>
+                <li>National Renewable Energy Laboratory, <em>BLAST-Lite: Battery Lifetime Analysis and Simulation Tool Suite</em>, 2023–2026.</li>
+                <li>M. Asiri et al., “Impact of Temperature and State-of-Charge on Long-Term Degradation of Lithium-Ion Batteries,” <em>RSC Advances</em>, 2025.</li>
+                <li>T. Morstyn et al., “Model Predictive Control for Distributed Microgrid Battery Energy Storage Systems,” <em>IEEE Transactions on Control Systems Technology</em>, 2018.</li>
+                <li>P. Stadler, A. Ashouri and F. Maréchal, “Distributed Model Predictive Control for Energy Systems in Microgrids,” 2015.</li>
+                <li>J. Vetter et al., “Ageing Mechanisms in Lithium-Ion Batteries,” <em>Journal of Power Sources</em>, vol. 147, no. 1–2, pp. 269–281, 2005.</li>
+                <li>A. Barré et al., “A Review on Lithium-Ion Battery Ageing Mechanisms and Estimations for Automotive Applications,” <em>Journal of Power Sources</em>, vol. 241, pp. 680–689, 2013.</li>
+                <li>C. R. Birkl et al., “Degradation Diagnostics for Lithium-Ion Cells,” <em>Journal of Power Sources</em>, vol. 341, pp. 373–386, 2017.</li>
+                <li>L. Yao et al., “A Review of Lithium-Ion Battery State of Health Estimation and Prediction Methods,” <em>World Electric Vehicle Journal</em>, vol. 12, no. 3, p. 113, 2021.</li>
+                <li>B. Xu et al., “Modeling of Lithium-Ion Battery Degradation for Cell Life Assessment,” <em>IEEE Transactions on Smart Grid</em>, vol. 9, no. 2, pp. 1131–1140, 2018.</li>
+            </ol>
         </section>
 
     </main>
@@ -602,7 +648,7 @@
         };
 
         let currentSlide = 1;
-        const totalSlides = 13;
+        const totalSlides = 14;
 
         function updateSlide() {
             document.querySelectorAll('.slide-content').forEach(el => {
@@ -728,10 +774,13 @@
 
         // Chart.js Setup for Slide 11
         function renderCharts() {
+            const socCanvas = document.getElementById('socChart');
+            const degradationCanvas = document.getElementById('degChart');
+            if (!socCanvas || !degradationCanvas) return;
             const hours = Array.from({length: 25}, (_, i) => `${i}:00`);
             
             // SOC Comparison Chart
-            new Chart(document.getElementById('socChart'), {
+            new Chart(socCanvas, {
                 type: 'line',
                 data: {
                     labels: hours,
@@ -745,7 +794,7 @@
             });
 
             // Degradation Chart
-            new Chart(document.getElementById('degChart'), {
+            new Chart(degradationCanvas, {
                 type: 'line',
                 data: {
                     labels: hours,
