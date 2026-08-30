@@ -216,6 +216,21 @@
         .presentation-brand img { width: 30px; height: 30px; object-fit: contain; }
         .presentation-brand span { color: #17486a; font-size: 10px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
         @media (max-width: 767px) { .presentation-brand { top: 10px; right: 10px; padding: 5px 7px; }.presentation-brand span { display: none; } }
+
+        /* Mobile deck: readable content, scrolling slides and touch-friendly controls */
+        #mobile-controls { display: none; }
+        @media (max-width: 767px) {
+            main { height: 100dvh !important; padding: 0 !important; align-items: stretch !important; }
+            .slide-content { width: 100% !important; min-height: 100dvh !important; height: 100dvh; padding: 4.5rem 1rem 5.6rem !important; overflow-x: hidden; overflow-y: auto; border-radius: 0 !important; justify-content: flex-start !important; -webkit-overflow-scrolling: touch; touch-action: pan-y; }
+            section[data-slide="1"] { padding: 0 !important; }
+            .title-layout { min-height: 100dvh; padding: 5.2rem 1.5rem 5.7rem; }
+            .title-university { font-size: .72rem; letter-spacing: .1em; }.title-university::before { width: 32px; }
+            .title-main h1 { font-size: clamp(2.25rem, 12vw, 3.4rem) !important; }.title-main p { font-size: .94rem; }
+            .title-identities { justify-self: start; }.title-meta { font-size: .76rem; }
+            .scientific-figure img, .results-figure img { max-height: none; object-fit: contain; }
+            #mobile-controls { position: fixed; z-index: 60; right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); left: 12px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 8px; padding: 8px; border: 1px solid rgba(23,72,106,.16); border-radius: 16px; background: rgba(255,254,250,.93); box-shadow: 0 10px 30px rgba(30,58,95,.18); backdrop-filter: blur(12px); }
+            #mobile-controls button { min-height: 38px; border: 0; border-radius: 11px; background: #e9f5f7; color: #0b6e72; font-size: 12px; font-weight: 800; }.mobile-next { background: linear-gradient(90deg, #0e7490, #2563eb) !important; color: #fff !important; }.mobile-prev:disabled, .mobile-next:disabled { opacity: .38; }.mobile-slide-status { color: #476278; font-size: 11px; font-weight: 800; white-space: nowrap; }
+        }
     </style>
 </head>
 <body class="select-none">
@@ -223,6 +238,11 @@
     <canvas id="canvas-3d"></canvas>
     <nav id="slide-nav" aria-label="Presentation slide navigation"></nav>
     <div class="presentation-brand" aria-label="Azerbaijan Technical University"><img src="/frontend/image/aztu-logo.png" alt="AzTU logo"><span>Azerbaijan Technical University</span></div>
+    <div id="mobile-controls" aria-label="Mobile slide navigation">
+        <button id="mobile-prev" class="mobile-prev" type="button" aria-label="Previous slide">← Previous</button>
+        <span id="mobile-slide-status" class="mobile-slide-status">1 / 14</span>
+        <button id="mobile-next" class="mobile-next" type="button" aria-label="Next slide">Next →</button>
+    </div>
 
     <main class="relative z-10 w-full h-screen flex items-center justify-center p-6 md:p-12 pt-20 pb-24">
         
@@ -658,6 +678,7 @@
             const activeEl = document.querySelector(`[data-slide="${currentSlide}"]`);
             if (activeEl) {
                 activeEl.classList.remove('hidden');
+                activeEl.scrollTop = 0;
                 setTimeout(() => {
                     activeEl.classList.remove('slide-enter');
                     activeEl.classList.add('slide-active');
@@ -665,6 +686,12 @@
             }
             const counter = document.getElementById('slide-counter');
             if (counter) counter.innerText = `Slide ${currentSlide} / ${totalSlides}`;
+            const mobileStatus = document.getElementById('mobile-slide-status');
+            const mobilePrev = document.getElementById('mobile-prev');
+            const mobileNext = document.getElementById('mobile-next');
+            if (mobileStatus) mobileStatus.innerText = `${currentSlide} / ${totalSlides}`;
+            if (mobilePrev) mobilePrev.disabled = currentSlide === 1;
+            if (mobileNext) mobileNext.disabled = currentSlide === totalSlides;
             document.querySelectorAll('.nav-dot').forEach((button, index) => {
                 const isActive = index + 1 === currentSlide;
                 button.classList.toggle('active', isActive);
@@ -843,6 +870,25 @@
                 button.addEventListener('click', () => { currentSlide = slide; updateSlide(); });
                 navigation.appendChild(button);
             }
+            document.getElementById('mobile-prev').addEventListener('click', prevSlide);
+            document.getElementById('mobile-next').addEventListener('click', nextSlide);
+
+            let touchStartX = 0;
+            let touchStartY = 0;
+            document.addEventListener('touchstart', (event) => {
+                const touch = event.changedTouches[0];
+                touchStartX = touch.clientX;
+                touchStartY = touch.clientY;
+            }, { passive: true });
+            document.addEventListener('touchend', (event) => {
+                const touch = event.changedTouches[0];
+                const deltaX = touch.clientX - touchStartX;
+                const deltaY = touch.clientY - touchStartY;
+                if (Math.abs(deltaX) < 60 || Math.abs(deltaX) <= Math.abs(deltaY)) return;
+                if (deltaX < 0) nextSlide();
+                else prevSlide();
+            }, { passive: true });
+            updateSlide();
             init3D();
             lucide.createIcons();
             renderMathInElement(document.body, {
